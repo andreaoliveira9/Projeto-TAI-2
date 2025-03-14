@@ -1,2 +1,2 @@
-# Projeto-2-TAI
+# Projeto-TAI-2
 Segundo projeto Teoria Algorítmica da Informação
