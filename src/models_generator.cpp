@@ -6,9 +6,11 @@
 #include <cctype>
 #include <cstdlib>
 
+using namespace std;
+
 // Converte um carácter (A, C, G, T) para índice (0 a 3)
 int charToIndex(char c) {
-    c = std::toupper(c);
+    c = toupper(c);
     switch(c) {
         case 'A': return 0;
         case 'C': return 1;
@@ -26,43 +28,52 @@ unsigned long power4(int k) {
 }
 
 int main(int argc, char* argv[]) {
-    if(argc < 3) {
-        std::cerr << "Uso: " << argv[0] << " <meta_file> <k>" << std::endl;
+    if(argc < 5) {
+        cerr << "Uso: " << argv[0] << " -i <meta_file> -k <k>" << endl;
         return 1;
     }
-    std::string metaFilename = argv[1];
-    int k = std::atoi(argv[2]);
-    if(k <= 0) {
-        std::cerr << "k tem de ser um inteiro positivo" << std::endl;
-        return 1;
+
+    string metaFilename;
+    int k;
+
+    for(int i = 1; i < argc; i++){
+        string arg = argv[i];
+        if(arg == "-i" && i+1 < argc) {
+            metaFilename = argv[++i];
+        } else if(arg == "-k" && i+1 < argc) {
+            k = atoi(argv[++i]);
+        } else {
+            cerr << "Argumento inválido: " << arg << endl;
+            return 1;
+        }
     }
     
     // Lê todo o ficheiro meta
-    std::ifstream metaFile(metaFilename);
+    ifstream metaFile(metaFilename);
     if(!metaFile) {
-        std::cerr << "Erro ao abrir o ficheiro " << metaFilename << std::endl;
+        cerr << "Erro ao abrir o ficheiro " << metaFilename << endl;
         return 1;
     }
-    std::stringstream buffer;
+    stringstream buffer;
     buffer << metaFile.rdbuf();
-    std::string content = buffer.str();
+    string content = buffer.str();
     
     // Extrai apenas os caracteres A, C, G, T (convertendo para maiúsculas)
-    std::string sequence;
+    string sequence;
     for (char c : content) {
-        char uc = std::toupper(c);
+        char uc = toupper(c);
         if(uc=='A' || uc=='C' || uc=='G' || uc=='T')
             sequence.push_back(uc);
     }
     
     if(sequence.size() < static_cast<size_t>(k+1)) {
-        std::cerr << "Sequência demasiado curta para o k fornecido" << std::endl;
+        cerr << "Sequência demasiado curta para o k fornecido" << endl;
         return 1;
     }
     
     unsigned long numContexts = power4(k);
     // Cria um vetor de contagens (tamanho = numContexts * 4), inicializado a zero
-    std::vector<int> counts(numContexts * 4, 0);
+    vector<int> counts(numContexts * 4, 0);
     
     // Para cada posição da sequência, extrai o contexto de tamanho k e atualiza a contagem do símbolo seguinte
     for(size_t i = 0; i <= sequence.size() - k - 1; i++) {
@@ -81,16 +92,16 @@ int main(int argc, char* argv[]) {
     
     // Grava o modelo no ficheiro binário "model.bin"
     system("mkdir -p models");
-    std::string modelFilename = "./models/k" + std::to_string(k) + ".bin";
-    std::ofstream outFile(modelFilename, std::ios::binary);
+    string modelFilename = "./models/k" + to_string(k) + ".bin";
+    ofstream outFile(modelFilename, ios::binary);
     if(!outFile) {
-        std::cerr << "Erro ao abrir model.bin para escrita" << std::endl;
+        cerr << "Erro ao abrir model.bin para escrita" << endl;
         return 1;
     }
     outFile.write(reinterpret_cast<const char*>(&k), sizeof(int));
     outFile.write(reinterpret_cast<const char*>(counts.data()), counts.size() * sizeof(int));
     outFile.close();
     
-    std::cout << "Modelo gerado e guardado em " + modelFilename << std::endl;
+    cout << "Modelo gerado e guardado em " + modelFilename << endl;
     return 0;
 }

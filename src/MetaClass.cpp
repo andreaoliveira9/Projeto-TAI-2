@@ -4,10 +4,12 @@
 #include <cmath>
 #include <cctype>
 
+using namespace std;
+
 MetaClass::MetaClass() : k(0) {}
 
 int MetaClass::charToIndex(char c) const {
-    c = std::toupper(c);
+    c = toupper(c);
     switch(c) {
         case 'A': return 0;
         case 'C': return 1;
@@ -24,29 +26,29 @@ unsigned long MetaClass::power4(int k) const {
     return res;
 }
 
-bool MetaClass::loadModel(const std::string &filename) {
-    std::ifstream inFile(filename, std::ios::binary);
+bool MetaClass::loadModel(const string &filename) {
+    ifstream inFile(filename, ios::binary);
     if (!inFile) {
-        std::cerr << "Erro ao abrir o ficheiro do modelo: " << filename << std::endl;
+        cerr << "Erro ao abrir o ficheiro do modelo: " << filename << endl;
         return false;
     }
     inFile.read(reinterpret_cast<char*>(&k), sizeof(int));
     if(!inFile) {
-        std::cerr << "Erro a ler k do ficheiro do modelo" << std::endl;
+        cerr << "Erro a ler k do ficheiro do modelo" << endl;
         return false;
     }
     unsigned long numContexts = power4(k);
     counts.resize(numContexts * 4);
     inFile.read(reinterpret_cast<char*>(counts.data()), counts.size() * sizeof(int));
     if(!inFile) {
-        std::cerr << "Erro a ler as contagens do modelo" << std::endl;
+        cerr << "Erro a ler as contagens do modelo" << endl;
         return false;
     }
     inFile.close();
     return true;
 }
 
-double MetaClass::compressSequence(const std::string &seq, double a) const {
+double MetaClass::compressSequence(const string &seq, double a) const {
     int n = seq.size();
     if(n < k) return 0.0;
     double cost = 0.0;
@@ -75,7 +77,7 @@ double MetaClass::compressSequence(const std::string &seq, double a) const {
     return cost;
 }
 
-double MetaClass::computeNRC(const std::string &seq, double a) const {
+double MetaClass::computeNRC(const string &seq, double a) const {
     int n = seq.size();
     if(n == 0) return 0.0;
     double cost = compressSequence(seq, a);
