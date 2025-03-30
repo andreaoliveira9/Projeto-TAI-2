@@ -8,7 +8,7 @@
 #include <filesystem>
 
 using namespace std;
-namespace fs = std::filesystem;
+namespace fs = filesystem;
 
 // Converte um caractere (A, C, G, T) para índice (0 a 3)
 int charToIndex(char c) {
