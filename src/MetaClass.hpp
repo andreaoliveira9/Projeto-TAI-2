@@ -17,7 +17,7 @@ public:
     bool loadModel(const string &filename);
     
     // Calcula o custo de compressão (em bits) para a sequência dada, usando suavização com parâmetro a
-    double compressSequence(const string &seq, double a) const;
+    double compressSequence(const string &seq, double a, int alphabetSize) const;
     
     // Calcula o Normalized Relative Compression (NRC) para a sequência: NRC = custo / (2 * |seq|)
     double computeNRC(const string &seq, double a) const;

@@ -48,31 +48,43 @@ bool MetaClass::loadModel(const string &filename) {
     return true;
 }
 
-double MetaClass::compressSequence(const string &seq, double a) const {
+double MetaClass::compressSequence(const string &seq, double a, int alphabetSize) const {
     int n = seq.size();
-    if(n < k) return 0.0;
+    if (n == 0) {
+        return 0.0;
+    }
+    
     double cost = 0.0;
-    // Para os primeiros k símbolos, assume-se codificação uniforme (2 bits cada)
-    cost += k * 2.0;
+    
+    int initialSymbols = min(n, k);
+    cost += initialSymbols * log2(alphabetSize);
     
     for (int i = k; i < n; i++) {
         unsigned long index = 0;
-        bool valid = true;
+        bool validContext = true;
         for (int j = i - k; j < i; j++) {
             int idx = charToIndex(seq[j]);
-            if(idx < 0) { valid = false; break; }
-            index = index * 4 + idx;
+            if (idx < 0 || idx >= alphabetSize) {
+                validContext = false;
+                break;
+            }
+            index = index * alphabetSize + idx;
         }
-        if(!valid) continue;
         int sym = charToIndex(seq[i]);
-        if(sym < 0) continue;
-        int count = counts[index * 4 + sym];
-        int sum = 0;
-        for (int s = 0; s < 4; s++) {
-            sum += counts[index * 4 + s];
+        if (sym < 0 || sym >= alphabetSize) {
+            validContext = false;
         }
-        double prob = (count + a) / (sum + 4 * a);
-        cost += -log(prob) / log(2.0);
+        if (!validContext) {
+            cost += log2(alphabetSize);
+            continue;
+        }
+        int countSymbol = counts[index * alphabetSize + sym];
+        int sumContext = 0;
+        for (int s = 0; s < alphabetSize; s++) {
+            sumContext += counts[index * alphabetSize + s];
+        }
+        double prob = (countSymbol + a) / (sumContext + a * alphabetSize);
+        cost += -log2(prob);
     }
     return cost;
 }
@@ -80,6 +92,7 @@ double MetaClass::compressSequence(const string &seq, double a) const {
 double MetaClass::computeNRC(const string &seq, double a) const {
     int n = seq.size();
     if(n == 0) return 0.0;
-    double cost = compressSequence(seq, a);
-    return cost / (2.0 * n);
+    int alphabetSize = counts.size() / power4(k);
+    double cost = compressSequence(seq, a, alphabetSize);
+    return cost / (log2(alphabetSize) * n);
 }
