@@ -37,7 +37,7 @@ int main(int argc, char* argv[]){
     // Processa os argumentos da linha de comando
     for(int i = 1; i < argc; i++){
         string arg = argv[i];
-        if(arg == "-i" && i+1 < argc) {
+        if(arg == "-db" && i+1 < argc) {
             db_filename = argv[++i];
         } else if(arg == "-m" && i+1 < argc) {
             model_filename = argv[++i];

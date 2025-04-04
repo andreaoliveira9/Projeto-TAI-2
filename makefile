@@ -4,21 +4,27 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -O2
 SRC_DIR = src
 BIN_DIR = $(SRC_DIR)/bin
 
-all: models_generator metaclass
+all: models_generator main calculate_similarities_levenshtein
 
 $(BIN_DIR)/models_generator.out: $(SRC_DIR)/models_generator.cpp
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/models_generator.out $(SRC_DIR)/models_generator.cpp
 
-$(BIN_DIR)/metaclass.out: $(SRC_DIR)/main.cpp $(SRC_DIR)/metaclass.cpp
+$(BIN_DIR)/main.out: $(SRC_DIR)/main.cpp $(SRC_DIR)/metaclass.cpp
 	@mkdir -p $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/metaclass.out $(SRC_DIR)/main.cpp $(SRC_DIR)/metaclass.cpp
+	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/main.out $(SRC_DIR)/main.cpp $(SRC_DIR)/metaclass.cpp
+
+$(BIN_DIR)/calculate_similarities_levenshtein.out: $(SRC_DIR)/calculate_similarities_levenshtein.cpp
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/calculate_similarities_levenshtein.out $(SRC_DIR)/calculate_similarities_levenshtein.cpp
 
 models_generator: $(BIN_DIR)/models_generator.out
 
-metaclass: $(BIN_DIR)/metaclass.out
+main: $(BIN_DIR)/main.out
+
+calculate_similarities_levenshtein: $(BIN_DIR)/calculate_similarities_levenshtein.out
 
 clean:
-	rm -f $(BIN_DIR)/models_generator.out $(BIN_DIR)/metaclass.out
+	rm -f $(BIN_DIR)/models_generator.out $(BIN_DIR)/main.out $(BIN_DIR)/calculate_similarities_levenshtein.out
 
-.PHONY: all models_generator metaclass clean
+.PHONY: all models_generator main calculate_similarities_levenshtein clean
