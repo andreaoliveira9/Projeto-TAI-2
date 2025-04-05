@@ -21,6 +21,10 @@ public:
     
     // Calcula o Normalized Relative Compression (NRC) para a sequência: NRC = custo / (2 * |seq|)
     double computeNRC(const string &seq, double a) const;
+
+    void setCounts(const vector<int> &counts);
+
+    void setK(int k);
     
 private:
     int charToIndex(char c) const;

@@ -9,5 +9,7 @@ make
 
 ./src/bin/main.out -db txt_files/db.txt -m models/k13.bin -a 0.01 -t 20
 
-./src/bin/calculate_similarities_levenshtein.out -db txt_files/db.txt -id1 "gi|49169782|ref|NC_005831.2| Human Coronavirus NL63, complete genome" -id2 "NC_005831.2 Human Coronavirus NL63, complete genome"
+./src/bin/similarities_levenshtein.out -db txt_files/db.txt -id1 "gi|49169782|ref|NC_005831.2| Human Coronavirus NL63, complete genome" -id2 "NC_005831.2 Human Coronavirus NL63, complete genome"
+
+./src/bin/similarities_models.out -db txt_files/db.txt -id1 "gi|49169782|ref|NC_005831.2| Human Coronavirus NL63, complete genome" -id2 "NC_005831.2 Human Coronavirus NL63, complete genome" -a 0.01 -k 13
 ````

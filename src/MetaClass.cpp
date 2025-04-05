@@ -96,3 +96,11 @@ double MetaClass::computeNRC(const string &seq, double a) const {
     double cost = compressSequence(seq, a, alphabetSize);
     return cost / (log2(alphabetSize) * n);
 }
+
+void MetaClass::setCounts(const vector<int> &counts) {
+    this->counts = counts;
+}
+
+void MetaClass::setK(int k) {
+    this->k = k;
+}
