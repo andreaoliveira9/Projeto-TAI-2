@@ -1,5 +1,3 @@
-/venv/
-
 # Prerequisites
 *.d
 
@@ -37,3 +35,4 @@ models
 .DS_Store
 .vscode
 *.csv
+venv

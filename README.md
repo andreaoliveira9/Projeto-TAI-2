@@ -2,7 +2,7 @@
 Segundo projeto Teoria Algorítmica da Informação
 
 ## Overview
-This repository contains five programs:
+This repository includes five programs:
 - `models_generator`: Generates models from a given file.
 - `main`: Main program that uses the models to compute NRC values and return the top sequences.
 - `similarities_levenshtein`: Computes Levenshtein similarities between sequences.
@@ -10,7 +10,7 @@ This repository contains five programs:
 - `complexity_profile`: Generates a complexity profile for a given sequence.
 
 ## Dependencies
-To compile and run these programs, ensure you have the following tools installed on your Linux system:
+To compile and run these programs, ensure the following tools are installed on your Linux system:
 
 - **g++ Compiler**
 - **Make**
@@ -23,7 +23,7 @@ sudo apt update
 sudo apt install build-essential
 ```
 
-Make sure your compiler supports the C++17 standard. This project uses the following flags:
+Make sure your compiler supports the C++17 standard. The project uses the following flags:
   
 ```
 -std=c++17 -Wall -Wextra -O2
@@ -38,7 +38,7 @@ cd Projeto-TAI-2
 make
 ```
 
-Alternatively, you can compile the files individually:
+Alternatively, compile the files individually:
 
 ```bash
 make models_generator
@@ -61,7 +61,7 @@ Example command:
 - `-meta`: Path to the meta file.
 - `-k`: Context size.
 
-The `models_generator` program saves the trained model to a file called `model_k13.bin` in `models` folder, which can be used later.
+The `models_generator` program saves the trained model to a file named `model_k13.bin` in the `models` folder, which can be used later.
 
 ### Running `main`
 
@@ -90,7 +90,7 @@ Example command:
 - `-id1`: First sequence ID.
 - `-id2`: Second sequence ID.
 
-The `similarities_levenshtein` program computes the Levenshtein similarity between two sequences.
+The `similarities_levenshtein` program calculates the Levenshtein similarity between two sequences.
 
 ### Running `similarities_models`
 
@@ -105,8 +105,8 @@ Example command:
 - `-id2`: Second sequence ID.
 - `-a`: Smoothing parameter (alpha).
 - `-k`: Context size.
-- 
-The `similarities_models` program computes the similarity between two sequences using a model trained with one of the sequences.
+
+The `similarities_models` program calculates the similarity between two sequences using a model trained on one of them.
 
 ### Running `complexity_profile`
 
@@ -122,10 +122,32 @@ Example command:
 - `-a`: Smoothing parameter (alpha).
 - `-id`: Sequence ID.
 
-The `complexity_profile` program generates a CSV file with values representing a complexity profile for the specified sequence ID, using the given model and parameters. The results are saved in `analysis` folder.
+The `complexity_profile` program generates a CSV file containing values that represent a complexity profile for the specified sequence ID, using the provided model and parameters. The results are saved in the `analysis` folder.
 
-To visualize the complexity profile plot, run the Jupyter notebook:
+### Visualizing the Complexity Profile
+To visualize the complexity profile using the provided Jupyter Notebook (`analysis/complexity_profile.ipynb`), follow these steps:
 
-```bash
-jupyter notebook complexity_profile.ipynb
-```
+1. **Create a virtual environment with Python 3.11** (if not already created):
+
+    ```bash
+    cd analysis
+    python3.11 -m venv venv
+    source venv/bin/activate
+    ```
+
+2. **Install the required Python packages** from `analysis/requirements.txt`:
+
+    ```bash
+    pip install -r analysis/requirements.txt
+    ```
+
+3. **Connect the Jupyter kernel to the virtual environment**:
+
+    In the notebook interface, click on `Kernel` > `Change Kernel` > choose the one corresponding to the virtual environment (it may show as `venv` or similar).
+    - If the virtual environment doesn't appear, run the following command first:
+
+        ```bash
+        python -m ipykernel install --user --name=venv
+        ```
+
+4. **Open and run `complexity_profile.ipynb`** to explore and visualize the complexity data.
