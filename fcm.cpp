@@ -11,8 +11,8 @@
 using namespace std;
 
 void printUsage(const string& progName) {
-    cout << "Usage: " << progName << " -s <source_file> -i <input_file> -k <order> -a <smoothing_parameter>" << endl;
-    cout << "Example: " << progName << " -s source.txt -i input.txt -k 3 -a 0.1" << endl;
+    cout << "Usage: " << progName << " -meta <source_file> -db <input_file> -id -k <order> -a <smoothing_parameter>" << endl;
+    cout << "Example: " << progName << " -meta meta.txt -db db.txt -id NewMutation1 -k 3 -a 0.1" << endl;
 }
 
 void saveModelBinary(const unordered_map<string, unordered_map<char, int>>& contextCounts, const string& filename) {
@@ -117,9 +117,16 @@ int main(int argc, char* argv[]) {
         cerr << "Erro: Não foi possível abrir o ficheiro " << sourceFile << endl;
         return 1;
     }
+
     stringstream sourceBuffer;
-    sourceBuffer << sourceStream.rdbuf();
-    string sourceText = sourceBuffer.str();
+    string line;
+    while (getline(sourceStream, line)) {
+        // Optionally, remove extra whitespace (if needed)
+        // line.erase(std::remove_if(line.begin(), line.end(), ::isspace), line.end());
+        // For now, we simply append the line (getline removes the '\n')
+        sourceBuffer << line;
+    }
+    std::string sourceText = sourceBuffer.str();
     sourceStream.close();
     
     if (sourceText.size() <= static_cast<size_t>(k)) {
@@ -136,17 +143,22 @@ int main(int argc, char* argv[]) {
     }
 
     // Save model binary
-    saveModelBinary(contextCounts, "model.bin");
-    cout << "Model saved to model.bin" << endl;
+    // saveModelBinary(contextCounts, "model.bin");
+    // cout << "Model saved to model.bin" << endl;
 
+    // Read the input file for analysis
     ifstream inputStream(inputFile);
     if (!inputStream) {
         cerr << "Erro: Não foi possível abrir o ficheiro " << inputFile << endl;
         return 1;
     }
-    stringstream inputBuffer;
-    inputBuffer << inputStream.rdbuf();
-    string inputText = inputBuffer.str();
+
+    std::stringstream inputBuffer;
+    while (std::getline(inputStream, line)) {
+        // Append each line (newlines removed by getline)
+        inputBuffer << line;
+    }
+    std::string inputText = inputBuffer.str();
     inputStream.close();
     
     if (inputText.size() <= static_cast<size_t>(k)) {
