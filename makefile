@@ -4,7 +4,7 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -O2
 SRC_DIR = src
 BIN_DIR = $(SRC_DIR)/bin
 
-all: models_generator main similarities_levenshtein similarities_models
+all: models_generator main similarities_levenshtein similarities_models complexity_profile
 
 $(BIN_DIR)/models_generator.out: $(SRC_DIR)/models_generator.cpp
 	@mkdir -p $(BIN_DIR)
@@ -22,6 +22,10 @@ $(BIN_DIR)/similarities_models.out: $(SRC_DIR)/similarities_models.cpp $(SRC_DIR
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/similarities_models.out $(SRC_DIR)/similarities_models.cpp $(SRC_DIR)/MetaClass.cpp
 
+$(BIN_DIR)/complexity_profile.out: $(SRC_DIR)/complexity_profile.cpp
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/complexity_profile.out $(SRC_DIR)/complexity_profile.cpp
+
 models_generator: $(BIN_DIR)/models_generator.out
 
 main: $(BIN_DIR)/main.out
@@ -30,7 +34,14 @@ similarities_levenshtein: $(BIN_DIR)/similarities_levenshtein.out
 
 similarities_models: $(BIN_DIR)/similarities_models.out
 
-clean:
-	rm -f $(BIN_DIR)/models_generator.out $(BIN_DIR)/main.out $(BIN_DIR)/similarities_levenshtein.out $(BIN_DIR)/similarities_models.out
+complexity_profile: $(BIN_DIR)/complexity_profile.out
 
-.PHONY: all models_generator main similarities_levenshtein similarities_models clean
+clean:
+	rm -f \
+		$(BIN_DIR)/models_generator.out \
+		$(BIN_DIR)/main.out \
+		$(BIN_DIR)/similarities_levenshtein.out \
+		$(BIN_DIR)/similarities_models.out \
+		$(BIN_DIR)/complexity_profile.out
+
+.PHONY: all models_generator main similarities_levenshtein similarities_models complexity_profile clean
