@@ -11,6 +11,11 @@
 
 using namespace std;
 
+void printUsage(const string& progName) {
+    cout << "Usage: " << progName << " -db <db_file> -id1 <sequence1_id> -id2 <sequence2_id> -a <smoothing_parameter> -k <context_size>" << endl;
+    cout << "Example: " << progName << "-db txt_files/db.txt -id1 'gi|49169782|ref|NC_005831.2| Human Coronavirus NL63, complete genome' -id2 'NC_005831.2 Human Coronavirus NL63, complete genome' -a 0.01 -k 13" << endl;
+}
+
 struct SequenceResult {
     string id;
     string seq;
@@ -74,8 +79,8 @@ vector<int> countContexts(const string& sequence, int k) {
 }
 
 int main(int argc, char* argv[]){
-    if(argc < 9) {
-        cerr << "Uso: " << argv[0] << " -i <db_file> -m <model> -a <alpha> -t <top>" << endl;
+    if(argc < 11) {
+        printUsage(argv[0]);
         return 1;
     }
     
@@ -97,6 +102,7 @@ int main(int argc, char* argv[]){
             id2 = argv[++i];
         } else {
             cerr << "Argumento inválido: " << arg << endl;
+            printUsage(argv[0]);
             return 1;
         }
     }

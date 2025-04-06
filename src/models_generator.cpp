@@ -10,6 +10,11 @@
 using namespace std;
 namespace fs = filesystem;
 
+void printUsage(const string& progName) {
+    cout << "Usage: " << progName << " -meta <meta_file> -k <context_size>" << endl;
+    cout << "Example: " << progName << "-meta txt_files/meta.txt -k 13" << endl;
+}
+
 // Converte um caractere (A, C, G, T) para índice (0 a 3)
 int charToIndex(char c) {
     c = toupper(c);
@@ -104,7 +109,7 @@ void writeModel(const string& modelFilename, int k, const vector<int>& counts) {
 
 int main(int argc, char* argv[]) {
     if (argc < 5) {
-        cerr << "Uso: " << argv[0] << " -i <meta_file> -k <k>" << endl;
+        printUsage(argv[0]);
         return 1;
     }
 
@@ -125,6 +130,7 @@ int main(int argc, char* argv[]) {
             }
         } else {
             cerr << "Argumento inválido: " << arg << endl;
+            printUsage(argv[0]);
             return 1;
         }
     }

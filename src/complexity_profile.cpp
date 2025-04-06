@@ -13,8 +13,8 @@ using namespace std;
 using ContextMap = unordered_map<string, unordered_map<char, int>>;
 
 void printUsage(const string& progName) {
-    cout << "Usage: " << progName << " -meta <meta_file> -db <db_file> -id <sequence_id> -k <order> -a <smoothing_parameter>" << endl;
-    cout << "Example: " << progName << " -meta meta.txt -db db.txt -id 'NC_005831.2 Human Coronavirus NL63, complete genome' -k 3 -a 0.1" << endl;
+    cout << "Usage: " << progName << " -meta <meta_file> -db <db_file> -id <sequence_id> -k <context_size> -a <smoothing_parameter>" << endl;
+    cout << "Example: " << progName << "-meta txt_files/meta.txt -db txt_files/db.txt -k 10 -a 0.01 -id 'NC_005831.2 Human Coronavirus NL63, complete genome'" << endl;
 }
 
 
