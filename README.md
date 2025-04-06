@@ -18,7 +18,7 @@ make
 ````bash
 make clean
 make complexity_profile
-./src/bin/complexity_profile.out txt_files/meta.txt txt_files/db.txt 10 0.01 "NC_005831.2 Human Coronavirus NL63, complete genome"
+./src/bin/complexity_profile.out -meta txt_files/meta.txt -db txt_files/db.txt -k 10 -a 0.01 -id "NC_005831.2 Human Coronavirus NL63, complete genome"
 ````
 
 Run ``complexity_profile.ipynb`` to see the results.

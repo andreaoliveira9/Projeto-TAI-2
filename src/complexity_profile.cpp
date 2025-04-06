@@ -13,8 +13,8 @@ using namespace std;
 using ContextMap = unordered_map<string, unordered_map<char, int>>;
 
 void printUsage(const string& progName) {
-    cout << "Usage: " << progName << " -meta <source_file> -db <input_file> -id -k <order> -a <smoothing_parameter>" << endl;
-    cout << "Example: " << progName << " -meta meta.txt -db db.txt -id NewMutation1 -k 3 -a 0.1" << endl;
+    cout << "Usage: " << progName << " -meta <meta_file> -db <db_file> -id <sequence_id> -k <order> -a <smoothing_parameter>" << endl;
+    cout << "Example: " << progName << " -meta meta.txt -db db.txt -id 'NC_005831.2 Human Coronavirus NL63, complete genome' -k 3 -a 0.1" << endl;
 }
 
 
@@ -34,7 +34,7 @@ double calculateAverageInformation(const unordered_map<string, unordered_map<cha
 
         int totalCount = 0;
         int symbolCount = 0;
-        // Safely get the count for symbol (defaulting to 0 if not found)
+
         auto freqIt = it->second.find(symbol);
         if (freqIt != it->second.end()) {
             symbolCount = freqIt->second;
@@ -49,7 +49,6 @@ double calculateAverageInformation(const unordered_map<string, unordered_map<cha
 
         totalInfo += logProb;
     
-        // Output per-symbol probability for plotting
         cout << i << " " << logProb << " " << symbol << endl;
     }
     
@@ -91,17 +90,24 @@ string read_meta_sequence(const string& filename) {
     return sequence;
 }
 
-void train_markov_model(ContextMap& model, const string& text, int k) {
+int train_markov_model(ContextMap& model, const string& text, int k) {
     for (size_t i = 0; i + k < text.size(); ++i) {
         string context = text.substr(i, k);
         char next = text[i + k];
         model[context][next]++;
     }
+    unordered_set<char> alphabet;
+    for (const auto& [ctx, transitions] : model) {
+        for (const auto& [symbol, _] : transitions) {
+            alphabet.insert(symbol);
+        }
+    }
+    return alphabet.size();
 }
 
-double calculate_probability(const ContextMap& model, const string& context, char next, double alpha) {
+double calculate_probability(const ContextMap& model, const string& context, char next, double alpha, int alphabet_size) {
     if (model.count(context) == 0) {
-        return 1.0 / 4.0;  // uniform prob if unseen context
+        return 1.0 / alphabet_size; 
     }
 
     const auto& next_counts = model.at(context);
@@ -111,18 +117,18 @@ double calculate_probability(const ContextMap& model, const string& context, cha
     }
 
     double count = next_counts.count(next) ? next_counts.at(next) : 0;
-    double vocab = 4.0; // A, C, G, T
+    double vocab = alphabet_size; 
     return (count + alpha) / (total + alpha * vocab);
 }
 
-void generate_complexity_profile(const string& sequence, const ContextMap& model, int k, double alpha, const string& output_csv) {
+void generate_complexity_profile(const string& sequence, const ContextMap& model, int k, double alpha, const string& output_csv, int alphabet_size) {
     ofstream out(output_csv);
     out << "position,complexity\n";
 
     for (size_t i = k; i < sequence.size(); ++i) {
         string context = sequence.substr(i - k, k);
         char next = sequence[i];
-        double p = calculate_probability(model, context, next, alpha);
+        double p = calculate_probability(model, context, next, alpha, alphabet_size);
         double complexity = -log2(p);
         out << i << "," << complexity << "\n";
     }
@@ -131,25 +137,41 @@ void generate_complexity_profile(const string& sequence, const ContextMap& model
 }
 
 int main(int argc, char* argv[]) {
-    if (argc < 6) {
-        cerr << "Uso: ./perfil_complexidade <meta.txt> <db.txt> <ordem_k> <alfa> <ID>\n";
+    if (argc != 11) {
+        printUsage(argv[0]);
         return 1;
     }
 
-    string meta_file = argv[1];
-    string db_file = argv[2];
-    int k = stoi(argv[3]);
-    double alpha = stod(argv[4]);
-    string id = argv[5];
+    string meta_file, db_file, id;
+    int k = 0;
+    double alpha = 0.0;
+
+    for (int i = 1; i < argc; ++i) {
+        string arg = argv[i];
+        if (arg == "-meta") {
+            meta_file = argv[++i];
+        } else if (arg == "-db") {
+            db_file = argv[++i];
+        } else if (arg == "-id") {
+            id = argv[++i];
+        } else if (arg == "-k") {
+            k = stoi(argv[++i]);
+        } else if (arg == "-a") {
+            alpha = stod(argv[++i]);
+        } else {
+            printUsage(argv[0]);
+            return 1;
+        }
+    }
 
     string meta_seq = read_meta_sequence(meta_file);
 
     ContextMap model;
-    train_markov_model(model, meta_seq, k);
+    int alphabet_size = train_markov_model(model, meta_seq, k);
 
     ifstream db(db_file);
     string seq = read_fasta_sequence(db, id);
 
-    generate_complexity_profile(seq, model, k, alpha, "analysis/perfil_complexidade_" + to_string(k) + "_" + to_string(alpha) + "_" + id + ".csv");
+    generate_complexity_profile(seq, model, k, alpha, "analysis/perfil_complexidade_" + to_string(k) + "_" + to_string(alpha) + "_" + id + ".csv", alphabet_size);
     return 0;
 }
