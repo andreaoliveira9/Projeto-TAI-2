@@ -130,7 +130,6 @@ To visualize the complexity profile using the provided Jupyter Notebook (`analys
 1. **Create a virtual environment with Python 3.11** (if not already created):
 
     ```bash
-    cd analysis
     python3.11 -m venv venv
     source venv/bin/activate
     ```
@@ -141,13 +140,6 @@ To visualize the complexity profile using the provided Jupyter Notebook (`analys
     pip install -r analysis/requirements.txt
     ```
 
-3. **Connect the Jupyter kernel to the virtual environment**:
+3. **Open and connect the Jupyter kernel to the virtual environment**
 
-    In the notebook interface, click on `Kernel` > `Change Kernel` > choose the one corresponding to the virtual environment (it may show as `venv` or similar).
-    - If the virtual environment doesn't appear, run the following command first:
-
-        ```bash
-        python -m ipykernel install --user --name=venv
-        ```
-
-4. **Open and run `complexity_profile.ipynb`** to explore and visualize the complexity data.
+4. **Run** to explore and visualize the complexity data.
