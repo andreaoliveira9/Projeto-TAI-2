@@ -5,7 +5,7 @@ Exemplo:
 ````bash
 make
 
-./src/bin/models_generator.out -i txt_files/meta.txt -k 13
+./src/bin/models_generator.out -meta txt_files/meta.txt -k 13
 
 ./src/bin/main.out -db txt_files/db.txt -m models/k13.bin -a 0.01 -t 20
 

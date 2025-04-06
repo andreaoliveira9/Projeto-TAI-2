@@ -114,7 +114,7 @@ int main(int argc, char* argv[]) {
     // Processa os argumentos da linha de comando
     for (int i = 1; i < argc; i++) {
         string arg = argv[i];
-        if (arg == "-i" && i + 1 < argc) {
+        if (arg == "-meta" && i + 1 < argc) {
             metaFilename = argv[++i];
         } else if (arg == "-k" && i + 1 < argc) {
             try {
