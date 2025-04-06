@@ -36,3 +36,4 @@
 models
 .DS_Store
 .vscode
+.csv
