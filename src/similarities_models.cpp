@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "MetaClass.hpp"
 #include <cctype>
+#include <cmath>  // Add this header
 
 using namespace std;
 

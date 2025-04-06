@@ -13,3 +13,12 @@ make
 
 ./src/bin/similarities_models.out -db txt_files/db.txt -id1 "gi|49169782|ref|NC_005831.2| Human Coronavirus NL63, complete genome" -id2 "NC_005831.2 Human Coronavirus NL63, complete genome" -a 0.01 -k 13
 ````
+
+## Correr complexity profiler
+````bash
+make clean
+make complexity_profile
+./src/bin/complexity_profile.out txt_files/meta.txt txt_files/db.txt 10 0.01 "NC_005831.2 Human Coronavirus NL63, complete genome"
+````
+
+Run ``complexity_profile.ipynb`` to see the results.
