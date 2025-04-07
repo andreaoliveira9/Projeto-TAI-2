@@ -8,6 +8,11 @@
 
 using namespace std;
 
+void printUsage(const string& progName) {
+  cout << "Usage: " << progName << " -db <db_file> -id1 <sequence1_id> -id2 <sequence2_id>" << endl;
+  cout << "Example: " << progName << "-db txt_files/db.txt -id1 'gi|49169782|ref|NC_005831.2| Human Coronavirus NL63, complete genome' -id2 'NC_005831.2 Human Coronavirus NL63, complete genome'" << endl;
+}
+
 struct Sequence {
   string id;
   string seq;
@@ -47,6 +52,11 @@ int levenshteinDistance(const string &s1, const string &s2) {
 int main(int argc, char *argv[]) {
   string dbFile, id1, id2;
 
+  if (argc < 7) {
+    printUsage(argv[0]);
+    return 1;
+  }
+
   for (int i = 1; i < argc; ++i) {
     string arg = argv[i];
     if (arg == "-db" && i + 1 < argc) {
@@ -55,6 +65,10 @@ int main(int argc, char *argv[]) {
       id1 = argv[++i];
     } else if (arg == "-id2" && i + 1 < argc) {
       id2 = argv[++i];
+    } else {
+      cerr << "Argumento inválido: " << arg << endl;
+      printUsage(argv[0]);
+      return 1;
     }
   }
 

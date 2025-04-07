@@ -37,3 +37,5 @@ models
 models_heat
 results_heat
 results
+*.csv
+venv

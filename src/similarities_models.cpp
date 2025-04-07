@@ -7,10 +7,15 @@
 #include <algorithm>
 #include "MetaClass.hpp"
 #include <cctype>
+#include <cmath> 
 
 using namespace std;
 
-// Estrutura para armazenar os resultados (identificador e NRC) de cada sequência
+void printUsage(const string& progName) {
+    cout << "Usage: " << progName << " -db <db_file> -id1 <sequence1_id> -id2 <sequence2_id> -a <smoothing_parameter> -k <context_size>" << endl;
+    cout << "Example: " << progName << "-db txt_files/db.txt -id1 'gi|49169782|ref|NC_005831.2| Human Coronavirus NL63, complete genome' -id2 'NC_005831.2 Human Coronavirus NL63, complete genome' -a 0.01 -k 13" << endl;
+}
+
 struct SequenceResult {
     string id;
     string seq;
@@ -18,68 +23,64 @@ struct SequenceResult {
 };
 
 int charToIndex(char c) {
-  c = toupper(c);
-  switch(c) {
-      case 'A': return 0;
-      case 'C': return 1;
-      case 'G': return 2;
-      case 'T': return 3;
-      default:   return -1;
-  }
+    c = toupper(c);
+    switch(c) {
+        case 'A': return 0;
+        case 'C': return 1;
+        case 'G': return 2;
+        case 'T': return 3;
+        default:   return -1;
+    }
 }
 
 unsigned long power4(int k) {
-  unsigned long res = 1;
-  for (int i = 0; i < k; i++)
-      res *= 4;
-  return res;
+    unsigned long res = 1;
+    for (int i = 0; i < k; i++)
+        res *= 4;
+    return res;
 }
 
-// Função para remover espaços e quebras de linha do fim da string
 void trim(string &s) {
     while(!s.empty() && isspace(s.back()))
         s.pop_back();
 }
 
 vector<int> countContexts(const string& sequence, int k) {
-  if (sequence.size() < static_cast<size_t>(k + 1))
-      throw runtime_error("Sequência demasiado curta para o valor de k fornecido.");
+    if (sequence.size() < static_cast<size_t>(k + 1))
+        throw runtime_error("Sequência demasiado curta para o valor de k fornecido.");
 
-  unsigned long numContexts = power4(k);
-  // Vetor de contagens: cada contexto (numContexts) com 4 possíveis símbolos seguintes
+    unsigned long numContexts = power4(k);
+
   vector<int> counts(numContexts * 4, 0);
 
-  // Calcula o índice do primeiro contexto (janela de tamanho k)
-  unsigned long context = 0;
-  for (int j = 0; j < k; j++) {
-      int idx = charToIndex(sequence[j]);
-      if (idx < 0)
-          throw runtime_error("Caractere inválido encontrado na sequência.");
-      context = context * 4 + idx;
-  }
-  // Conta o símbolo que segue o primeiro contexto
-  int sym = charToIndex(sequence[k]);
-  if (sym >= 0)
+    unsigned long context = 0;
+    for (int j = 0; j < k; j++) {
+        int idx = charToIndex(sequence[j]);
+        if (idx < 0)
+            throw runtime_error("Caractere inválido encontrado na sequência.");
+        context = context * 4 + idx;
+    }
+
+    int sym = charToIndex(sequence[k]);
+    if (sym >= 0)
       counts[context * 4 + sym]++;
 
-  // Pre-calcula 4^(k-1) para atualizar a janela deslizante
-  unsigned long highest = power4(k - 1);
+    unsigned long highest = power4(k - 1);
 
-  // Atualiza os contextos de forma deslizante e incrementa as contagens
-  for (size_t i = 1; i <= sequence.size() - k - 1; i++) {
-      int new_digit = charToIndex(sequence[i + k - 1]);
-      context = (context % highest) * 4 + new_digit;
-      int next_sym = charToIndex(sequence[i + k]);
-      if (next_sym >= 0)
-          counts[context * 4 + next_sym]++;
-  }
+    for (size_t i = 1; i <= sequence.size() - k - 1; i++) {
+        int new_digit = charToIndex(sequence[i + k - 1]);
+        context = (context % highest) * 4 + new_digit;
+        int next_sym = charToIndex(sequence[i + k]);
+        if (next_sym >= 0)
+            counts[context * 4 + next_sym]++;
+    }
 
-  return counts;
+    return counts;
 }
 
 int main(int argc, char* argv[]){
-    if(argc < 9) {
-        cerr << "Uso: " << argv[0] << " -i <db_file> -m <model> -a <alpha> -t <top>" << endl;
+    if(argc < 11) {
+        printUsage(argv[0]);
         return 1;
     }
     
@@ -87,7 +88,6 @@ int main(int argc, char* argv[]){
     int k;
     double a;
     
-    // Processa os argumentos da linha de comando
     for(int i = 1; i < argc; i++){
         string arg = argv[i];
         if(arg == "-db" && i+1 < argc) {
@@ -102,6 +102,7 @@ int main(int argc, char* argv[]){
             id2 = argv[++i];
         } else {
             cerr << "Argumento inválido: " << arg << endl;
+            printUsage(argv[0]);
             return 1;
         }
     }
@@ -162,8 +163,7 @@ int main(int argc, char* argv[]){
     double nrc21 = model2.computeNRC(seq1, a);
     double meanNRC = (nrc12 + nrc21) / 2.0;
 
-    // Similaridade como inverso da diferença ao valor próprio
-    double similarity = exp(-meanNRC); // valor entre 0 e 1
+    double similarity = exp(-meanNRC);
     cout << "NRC (id1 → id2): " << nrc12 << endl;
     cout << "NRC (id2 → id1): " << nrc21 << endl;
     cout << "NRC médio: " << meanNRC << endl;

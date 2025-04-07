@@ -10,6 +10,11 @@
 
 using namespace std;
 
+void printUsage(const string& progName) {
+    cout << "Usage: " << progName << " -db <db_file> -m <model_file> -a <smoothing_parameter> -t <k_top>" << endl;
+    cout << "Example: " << progName << "-db txt_files/db.txt -m models/k13.bin -a 0.01 -t 20" << endl;
+}
+
 // Estrutura para armazenar os resultados (identificador e NRC) de cada sequência
 struct SequenceResult {
     string id;
@@ -25,7 +30,7 @@ void trim(string &s) {
 
 int main(int argc, char* argv[]){
     if(argc < 9) {
-        cerr << "Uso: " << argv[0] << " -i <db_file> -m <model> -a <alpha> -t <top>" << endl;
+        printUsage(argv[0]);
         return 1;
     }
     
@@ -47,6 +52,7 @@ int main(int argc, char* argv[]){
             top = atoi(argv[++i]);
         } else {
             cerr << "Argumento inválido: " << arg << endl;
+            printUsage(argv[0]);
             return 1;
         }
     }
