@@ -34,3 +34,6 @@
 models
 .DS_Store
 .vscode
+models_heat
+results_heat
+results

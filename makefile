@@ -10,17 +10,17 @@ $(BIN_DIR)/models_generator.out: $(SRC_DIR)/models_generator.cpp
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/models_generator.out $(SRC_DIR)/models_generator.cpp
 
-$(BIN_DIR)/main.out: $(SRC_DIR)/main.cpp $(SRC_DIR)/metaclass.cpp
+$(BIN_DIR)/main.out: $(SRC_DIR)/main.cpp $(SRC_DIR)/MetaClass.cpp
 	@mkdir -p $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/main.out $(SRC_DIR)/main.cpp $(SRC_DIR)/metaclass.cpp
+	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/main.out $(SRC_DIR)/main.cpp $(SRC_DIR)/MetaClass.cpp
 
 $(BIN_DIR)/similarities_levenshtein.out: $(SRC_DIR)/similarities_levenshtein.cpp
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/similarities_levenshtein.out $(SRC_DIR)/similarities_levenshtein.cpp
 
-$(BIN_DIR)/similarities_models.out: $(SRC_DIR)/similarities_models.cpp $(SRC_DIR)/metaclass.cpp
+$(BIN_DIR)/similarities_models.out: $(SRC_DIR)/similarities_models.cpp $(SRC_DIR)/MetaClass.cpp
 	@mkdir -p $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/similarities_models.out $(SRC_DIR)/similarities_models.cpp $(SRC_DIR)/metaclass.cpp
+	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/similarities_models.out $(SRC_DIR)/similarities_models.cpp $(SRC_DIR)/MetaClass.cpp
 
 models_generator: $(BIN_DIR)/models_generator.out
 
