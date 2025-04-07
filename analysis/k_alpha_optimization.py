@@ -75,7 +75,7 @@ for k in K_VALUES:
             
 # Plotting heatmaps
 for target in TARGET_IDS:
-    print(f"🔎 Lowest NRC for {target}:")
+    print(f"Lowest NRC for {target}:")
     z = []
     for k in K_VALUES:
         row = []
