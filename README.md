@@ -143,3 +143,31 @@ To visualize the complexity profile using the provided Jupyter Notebook (`analys
 3. **Open and connect the Jupyter kernel to the virtual environment**
 
 4. **Run** to explore and visualize the complexity data.
+
+### Optimizing Parameters (`k_alpha_optimization.ipynb`)
+
+The `analysis/k_alpha_optimization.ipynb` notebook automates the process of finding the optimal parameters `k` (context size) and `alpha` (smoothing) for training the MetaClass model.
+
+It evaluates combinations of `k` and `alpha`, extracts NRC values for selected sequences, and generates heatmaps to help identify the best configuration.
+
+#### To run the notebook:
+
+1. Ensure `main.out` and `models_generator.out` are compiled and available in `./src/bin/`.
+2. Launch Jupyter Notebook in the project root or in the `analysis` folder:
+
+    ```bash
+    jupyter notebook
+    ```
+
+3. Open `analysis/k_optimization.ipynb`.
+4. Follow the steps in the notebook. You’ll be prompted to:
+    - Provide the path to the `meta` and `db` files
+    - Enter the sequence IDs to analyze (e.g., `New1,New2`)
+5. The notebook will train models, run NRC evaluations, and generate NRC heatmaps in the root folder.
+
+#### Dependencies:
+
+Install if needed (within your virtual environment):
+
+```bash
+pip install matplotlib numpy pandas seaborn
