@@ -55,7 +55,7 @@ make complexity_profile
 Example command:
 
 ```bash
-./src/bin/models_generator.out -meta txt_files/meta.txt -k 13
+./src/bin/models_generator.out -meta txt_files/meta.txt -k 11
 ```
 
 - `-meta`: Path to the meta file.
@@ -68,7 +68,7 @@ The `models_generator` program saves the trained model to a file named `model_k1
 Example command:
 
 ```bash
-./src/bin/main.out -db txt_files/db.txt -m models/k13.bin -a 0.01 -t 20
+./src/bin/main.out -db txt_files/db.txt -m models/k11.bin -a 0.001 -t 20
 ```
 
 - `-db`: Path to the database file.
@@ -97,7 +97,7 @@ The `similarities_levenshtein` program calculates the Levenshtein similarity bet
 Example command:
 
 ```bash
-./src/bin/similarities_models.out -db txt_files/db.txt -id1 "gi|49169782|ref|NC_005831.2| Human Coronavirus NL63, complete genome" -id2 "NC_005831.2 Human Coronavirus NL63, complete genome" -a 0.01 -k 13
+./src/bin/similarities_models.out -db txt_files/db.txt -id1 "gi|49169782|ref|NC_005831.2| Human Coronavirus NL63, complete genome" -id2 "NC_005831.2 Human Coronavirus NL63, complete genome" -a 0.001 -k 11
 ```
 
 - `-db`: Path to the database file.
@@ -113,7 +113,7 @@ The `similarities_models` program calculates the similarity between two sequence
 Example command:
 
 ```bash
-./src/bin/complexity_profile.out -meta txt_files/meta.txt -db txt_files/db.txt -k 10 -a 0.01 -id "NC_005831.2 Human Coronavirus NL63, complete genome"
+./src/bin/complexity_profile.out -meta txt_files/meta.txt -db txt_files/db.txt -k 11 -a 0.001 -id "NC_005831.2 Human Coronavirus NL63, complete genome"
 ```
 
 - `-meta`: Path to the meta file.
