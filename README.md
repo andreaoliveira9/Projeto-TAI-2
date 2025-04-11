@@ -10,9 +10,8 @@ This repository includes five programs:
 - `complexity_profile`: Generates a complexity profile for a given sequence.
 
 ## Dependencies
-To compile and run these programs, ensure the following tools are installed on your Linux system:
+To compile and run these programs, ensure the following tools are installed on your system:
 
-- **g++ Compiler**
 - **Make**
 - **C++ Compiler with C++17 support** (e.g., `g++` with `-std=c++17`)
 
@@ -61,7 +60,7 @@ Example command:
 - `-meta`: Path to the meta file.
 - `-k`: Context size.
 
-The `models_generator` program saves the trained model to a file named `model_k13.bin` in the `models` folder, which can be used later.
+The `models_generator` program saves the trained model to a file named `model_k11.bin` in the `models` folder, which can be used later.
 
 ### Running `main`
 
@@ -124,7 +123,10 @@ Example command:
 
 The `complexity_profile` program generates a CSV file containing values that represent a complexity profile for the specified sequence ID, using the provided model and parameters. The results are saved in the `analysis` folder.
 
-### Visualizing the Complexity Profile
+### Jupyter Notebooks
+
+#### Complexity Profiles
+
 To visualize the complexity profile using the provided Jupyter Notebook (`analysis/complexity_profile.ipynb`), follow these steps:
 
 1. **Create a virtual environment with Python 3.11** (if not already created):
@@ -144,30 +146,23 @@ To visualize the complexity profile using the provided Jupyter Notebook (`analys
 
 4. **Run** to explore and visualize the complexity data.
 
-### Optimizing Parameters (`k_alpha_optimization.ipynb`)
+#### Optimizing Parameters
 
 The `analysis/k_alpha_optimization.ipynb` notebook automates the process of finding the optimal parameters `k` (context size) and `alpha` (smoothing) for training the MetaClass model.
 
 It evaluates combinations of `k` and `alpha`, extracts NRC values for selected sequences, and generates heatmaps to help identify the best configuration.
 
-#### To run the notebook:
-
-1. Ensure `main.out` and `models_generator.out` are compiled and available in `./src/bin/`.
-2. Launch Jupyter Notebook in the project root or in the `analysis` folder:
+To use this notebook:
+1. **Create a virtual environment with Python 3.11** (if not already created):
 
     ```bash
-    jupyter notebook
+    python3.11 -m venv venv
+    source venv/bin/activate
     ```
+2. **Install the required Python packages** from `analysis/requirements.txt`:
 
-3. Open `analysis/k_optimization.ipynb`.
-4. Follow the steps in the notebook. You’ll be prompted to:
-    - Provide the path to the `meta` and `db` files
-    - Enter the sequence IDs to analyze (e.g., `New1,New2`)
-5. The notebook will train models, run NRC evaluations, and generate NRC heatmaps in the root folder.
-
-#### Dependencies:
-
-Install if needed (within your virtual environment):
-
-```bash
-pip install matplotlib numpy pandas seaborn
+    ```bash
+    pip install -r analysis/requirements.txt
+    ```
+3. **Open and connect the Jupyter kernel to the virtual environment**
+4. **Run** to generate the heatmaps and analyze the results.
