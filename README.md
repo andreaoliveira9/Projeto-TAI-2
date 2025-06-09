@@ -1,6 +1,8 @@
 # Projeto-TAI-2
 Segundo projeto Teoria Algorítmica da Informação
 
+Nota: 19
+
 ## Overview
 This repository includes five programs:
 - `models_generator`: Generates models from a given file.
